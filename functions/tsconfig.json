@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",                // Firebase Cloud Functions runtime supports at least ES2017
+    "module": "commonjs",              // Cloud Functions use CommonJS modules
+    "lib": ["ES2017", "DOM"],          // DOM is only needed if you ever touch browser APIs
+    "rootDir": "src",                  // all your .ts files live under src/
+    "outDir": "lib",                   // compiled .js files will go here
+    "esModuleInterop": true,           // allow default imports from CommonJS modules
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}

@@ -1,0 +1,7 @@
+# Auto-normalize all text files
+* text=auto
+
+# Ensure Dart, JSON, YAML stay LF
+*.dart   text eol=lf
+*.yaml   text eol=lf
+*.json   text eol=lf

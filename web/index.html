@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="description" content="Book Duel PWA">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Book Duel">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <title>Book Duel</title>
+
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      background-color: #7ED7C1;
+    }
+    /* Spinner loader */
+    #loading {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #f5f5f5;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9998;
+    }
+    .loading-indicator {
+      width: 50px; height: 50px;
+      border: 5px solid #e0e0e0;
+      border-top-color: #4caf9d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .loading-text {
+      margin-top: 20px;
+      font-family: sans-serif;
+      color: #333;
+    }
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+
+  <!-- WeakRef polyfill for old iOS Safari -->
+  <script>
+    /*! (c) Andrea Giammarchi - ISC */
+    var self = this || {};
+    try {
+      self.WeakRef = WeakRef;
+      self.FinalizationGroup = FinalizationGroup;
+    } catch (e) {
+      (function(e,t){
+        var i=new e;
+        function n(e){i.set(this,e)}
+        t(n.prototype,{deref:{value:function(){return i.get(this)}}});
+        var a=new e;
+        function r(e){a.set(this,[])}
+        t(r.prototype,{
+          register:{value:function(e,t){var i=a.get(this);i.indexOf(t)<0&&i.push(t)}},
+          unregister:{value:function(e,t){var i=a.get(this),n=i.indexOf(t);return-1<n&&i.splice(n,1),-1<n}},
+          cleanupSome:{value:function(e){e(a.get(this))}}
+        });
+        self.WeakRef = n;
+        self.FinalizationGroup = r;
+      })(WeakMap, Object.defineProperties);
+    }
+  </script>
+</head>
+<body>
+  <!-- Spinner loader -->
+  <div id="loading">
+    <div class="loading-indicator"></div>
+    <div class="loading-text">Loading…</div>
+  </div>
+  
+  <!-- Remove loader on first frame -->
+  <script>
+    window.addEventListener('flutter-first-frame', function() {
+      var splash = document.getElementById('loading');
+      if (splash) {
+        splash.style.transition = 'opacity 0.5s ease';
+        splash.style.opacity = '0';
+        setTimeout(function(){ splash.remove(); }, 500);
+      }
+    });
+  </script>
+
+  <!-- Poll fallback -->
+  <script>
+    (function pollFlutter() {
+      if (document.querySelector('flt-glass-pane')) {
+        var splash = document.getElementById('loading');
+        splash && splash.remove();
+      } else {
+        setTimeout(pollFlutter, 100);
+      }
+    })();
+  </script>
+
+  <!-- Absolute fallback after 10s -->
+  <script>
+    setTimeout(function(){
+      var splash = document.getElementById('loading');
+      splash && splash.remove();
+    }, 10000);
+  </script>
+  
+  <!-- Flutter bootstrap -->
+  <script src="flutter_bootstrap.js" async></script>
+
+  <!-- Prevent double-tap/pinch zoom on iOS -->
+  <script>
+    document.addEventListener('touchmove', function(e) {
+      if (e.scale !== 1) e.preventDefault();
+    }, { passive: false });
+    var lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+      var now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, false);
+  </script>
+</body>
+</html>

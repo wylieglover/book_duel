@@ -1,0 +1,81 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "bookduel",
+          "appId": "1:768782325833:android:81bc437d184bd02ce54798",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bookduel",
+          "configurations": {
+            "android": "1:768782325833:android:81bc437d184bd02ce54798",
+            "ios": "1:768782325833:ios:fe93cfc440bfce33e54798",
+            "macos": "1:768782325833:ios:fe93cfc440bfce33e54798",
+            "web": "1:768782325833:web:b06496707ff94baae54798",
+            "windows": "1:768782325833:web:cc55656f371c3e35e54798"
+          }
+        }
+      }
+    }
+  },
+ "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/proxy",
+        "function": "imageProxy"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions",
+    "predeploy": [
+      "npm --prefix functions run lint",
+      "npm --prefix functions run build"
+    ],
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "*.local"
+    ]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true,
+      "port": 5002
+    },
+    "singleProjectMode": true
+  }
+}
